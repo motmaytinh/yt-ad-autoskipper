@@ -3,6 +3,7 @@
     'videoAdUiSkipButton', // Old close ad button
     'ytp-ad-skip-button ytp-button', // New close ad button
     'ytp-ad-overlay-close-button', // Close overlay button
+    'ytp-ad-button ytp-ad-choice-interstitial-button ytp-ad-choice-interstitial-button-default' // Chose watch ad during video
   ];
 
   var timeoutId;
@@ -21,7 +22,7 @@
       .map(name => {
         return Array.from(document.getElementsByClassName(name)) || [];
       })
-      .reduce(function(acc, elems) {
+      .reduce(function (acc, elems) {
         return acc.concat(elems);
       }, [])
   }
@@ -53,7 +54,7 @@
 
     // Find the actual parent with the display style 'none' so that we can
     // listen to that element's changes.
-    var parentWithDisplayStyle = (function() {
+    var parentWithDisplayStyle = (function () {
       var currentParent = button;
       while (currentParent !== null) {
         if (currentParent.style.display === 'none') {
@@ -81,7 +82,7 @@
     // If this is the first skip button we have encountered, we will have to
     // set up the observer first.
     if (!skipBtnObserver) {
-      skipBtnObserver = new MutationObserver(function() {
+      skipBtnObserver = new MutationObserver(function () {
         if (!isBtnVisible(observedSkipBtn)) {
           return;
         }
@@ -95,7 +96,7 @@
     // Since we will eventually be working on the button we need to have this
     // reference stored.
     observedSkipBtn = button;
-    
+
     // Note that we are actually observing the button's parent that has the
     // display attribute, as the skip button's visibilty is controlled by its
     // parent.
@@ -113,9 +114,9 @@
       // it. This also gives a user time to not-skip the ad in the future.
       if (!isBtnVisible(button)) {
         triggerClickWhenVisible(button);
-        
+
         return;
-      } 
+      }
 
       triggerClick(button);
     })
@@ -153,7 +154,7 @@
       return false;
     }
 
-    var ytdPlayer = (function(nodeList) {
+    var ytdPlayer = (function (nodeList) {
       return nodeList && nodeList[0];
     })(document.getElementsByTagName('ytd-player'));
 
@@ -161,7 +162,7 @@
       return false;
     }
 
-    var observer = new MutationObserver(function() {
+    var observer = new MutationObserver(function () {
       checkAndClickButtons();
     });
 
@@ -170,7 +171,7 @@
     clearTimeout(timeoutId); // Just for good measure
 
     return true;
-  } 
+  }
 
   /**
    * We have two implementations to check for the skip ad buttons: one is based on
@@ -195,7 +196,7 @@
      * Starts the poll to see if any of the ad buttons are present in the page now.
      * The interval of 2 seconds is arbitrary. I believe it is a good compromise.
      */
-    timeoutId = setTimeout(function() {
+    timeoutId = setTimeout(function () {
       checkAndClickButtons();
 
       initTimeout();
@@ -207,7 +208,7 @@
    * window is the same as the top parent window. The try..catch is there because
    * some browsers will not let a script in an iframe access the parent window.
    */
-  var inIframe = (function() {
+  var inIframe = (function () {
     try {
       return window.self !== window.top;
     } catch (e) {
